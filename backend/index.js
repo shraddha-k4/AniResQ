@@ -10,16 +10,22 @@ dotenv.config();
 const app = express();
 app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({ extended: true })); // <-- add this
-
+app.use(express.urlencoded({ extended: true })); 
 connectDB();
 
-
+//auth
 app.use("/api/auth",authrouter);
+
+
 
 app.use('/',(req,res)=>{
   res.send("Hello world");
 })
+
+// app.get("/", (req, res) => {
+//   res.json({ message: "API running" });
+// });
+
 
 const PORT=3000;
 // app.listen(PORT,()=>{

@@ -1,33 +1,29 @@
 {
   "expo": {
-    "scheme" : "AniResQ",
     "name": "AniResQ",
-    "slug": "AniResQ",
+    "slug": "aniresq",
+    "scheme": "aniresq",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/aniresq.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
-    "splash": {
-      "image": "./assets/splash-icon.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/aniresq.png",
+        "backgroundColor": "#1F3D2B"
       },
-      "edgeToEdgeEnabled": true
+      "package": "com.anonymous.aniresq"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/img/favicon.png"
     },
     "plugins": [
-      "expo-router"
+      "expo-router",
+      "@react-native-community/datetimepicker"
     ]
   }
 }

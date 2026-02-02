@@ -217,3 +217,121 @@ export const verifyOTP = async (req, res) => {
         res.status(500).json({ message: "Server error" });
     }
 };
+
+
+
+export const getMyProfile = async (req, res) => {
+  const user = await User.findById(req.user.id).select("-password");
+  res.json({ user });
+};
+
+
+export const updateMyProfile = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const {
+      name,
+      mobileno,
+      address = {},
+      aboutus,
+      mission,
+      regiid,
+      } = req.body || {};
+
+    const { city, dist, state, pincode, country } = address;
+
+    // ---------- VALIDATION ----------
+    if (mobileno && !/^\d{10}$/.test(mobileno)) {
+      return res.status(400).json({ message: "Mobile number must be exactly 10 digits" });
+    }
+
+    if (pincode && !/^\d{6}$/.test(pincode)) {
+      return res.status(400).json({ message: "Pincode must be exactly 6 digits" });
+    }
+
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    // ---------- IMAGE UPDATE ----------
+    if (req.file) {
+      const result = await new Promise((resolve, reject) => {
+        cloudinary.uploader
+          .upload_stream({ folder: "users" }, (err, result) => {
+            if (err) reject(err);
+            else resolve(result);
+          })
+          .end(req.file.buffer);
+      });
+
+      user.image = result.secure_url;
+    }
+
+    // ---------- UPDATE FIELDS ----------
+    if (name) user.name = name;
+    if (mobileno) user.mobileno = mobileno;
+    if (aboutus) user.aboutus = aboutus;
+    if (mission) user.mission = mission;
+    if (regiid) user.regiid = regiid;
+
+    user.address = {
+      city: city ?? user.address.city,
+      dist: dist ?? user.address.dist,
+      state: state ?? user.address.state,
+      pincode: pincode ?? user.address.pincode,
+      country: country ?? user.address.country,
+    };
+
+    await user.save();
+
+    res.status(200).json({
+      message: "Profile updated successfully",
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        mobileno: user.mobileno,
+        role: user.role,
+        address: user.address,
+        image: user.image,
+        aboutus: user.aboutus,
+        mission: user.mission,
+        regiid:user.regiid,
+      },
+    });
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Server error",
+      error: error.message,
+    });
+  }
+};
+
+
+export const createAdmin = async (req, res) => {
+  try {
+    const { name, email, password, secretKey } = req.body;
+
+    if (secretKey !== process.env.ADMIN_SECRET) {
+      return res.status(403).json({ message: "Not allowed" });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const admin = await User.create({
+      name,
+      email,
+      password: hashedPassword,
+      role: "admin"
+    });
+
+    res.status(201).json({
+      message: "Admin created successfully",
+      admin
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
