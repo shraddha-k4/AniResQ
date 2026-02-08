@@ -44,7 +44,7 @@ export const signup = async (req, res) => {
       return res.status(400).json({ message: "Email already exists" });
     }
 
-    if (!role || !["citizen", "ngo"].includes(role.toLowerCase())) {
+    if (!role || !["citizen", "ngo","admin"].includes(role.toLowerCase())) {
   return res.status(400).json({ message: "Valid role is required" });
 }
 
@@ -309,29 +309,3 @@ export const updateMyProfile = async (req, res) => {
   }
 };
 
-
-export const createAdmin = async (req, res) => {
-  try {
-    const { name, email, password, secretKey } = req.body;
-
-    if (secretKey !== process.env.ADMIN_SECRET) {
-      return res.status(403).json({ message: "Not allowed" });
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const admin = await User.create({
-      name,
-      email,
-      password: hashedPassword,
-      role: "admin"
-    });
-
-    res.status(201).json({
-      message: "Admin created successfully",
-      admin
-    });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};

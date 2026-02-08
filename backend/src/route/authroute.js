@@ -1,5 +1,5 @@
 import express from "express";
-import { createAdmin, forgotPassword, getMyProfile, login, signup, updateMyProfile, verifyOTP } from "../controller/authcontroller.js";
+import { forgotPassword, getMyProfile, login, signup, updateMyProfile, verifyOTP } from "../controller/authcontroller.js";
 import authMiddleware from "../middleware/authmiddleware.js";
 import upload from "../middleware/upload.js";
 import { createReport, getAllReports, getMyReports, getReportById } from "../controller/reportController.js";
@@ -27,7 +27,7 @@ authrouter.get("/allreportcase", authMiddleware, getAllReports);      // admin /
 authrouter.get("/myreport", authMiddleware, getMyReports);        // citizen
 // authrouter.get("/:idreport", authMiddleware, getReportById);      // single report
 
-authrouter.post("/createadmin",authMiddleware,createAdmin);
+
 
 // Protected route example
 authrouter.get("/profile", authMiddleware, (req, res) => {

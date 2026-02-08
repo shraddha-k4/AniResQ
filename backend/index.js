@@ -1,3 +1,4 @@
+
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
@@ -28,9 +29,7 @@ app.use('/',(req,res)=>{
 
 
 const PORT=3000;
-// app.listen(PORT,()=>{
-//   console.log(`http://localhost:${PORT}`);
-// })
+
 
 
 app.listen(PORT,'0.0.0.0',()=>{

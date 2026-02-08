@@ -12,6 +12,8 @@
       "supportsTablet": true
     },
     "android": {
+     
+
       "adaptiveIcon": {
         "foregroundImage": "./assets/aniresq.png",
         "backgroundColor": "#1F3D2B"
