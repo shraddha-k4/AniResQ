@@ -537,7 +537,7 @@ import {
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Auth_profile } from "../../Apiendpoint.jsx";
+import { Auth_profile } from "../../../Apiendpoint.jsx";
 
 /* ---------------- HELPER ---------------- */
 const formatDate = (dateString) => {
@@ -611,7 +611,7 @@ export default function Profile() {
           name="arrow-back"
           size={26}
           color="black"
-          onPress={() => router.replace("/ngo/home")}
+          onPress={() => router.replace.back}
         />
         <Text style={styles.headerTitle}>Profile</Text>
         <View style={{ width: 26 }} />
@@ -623,7 +623,7 @@ export default function Profile() {
           source={
             user?.image
               ? { uri: user.image }
-              : require("../../assets/image/profile.png")
+              : require("../../../assets/image/profile.png")
           }
           style={styles.profileImg}
         />

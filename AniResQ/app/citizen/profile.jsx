@@ -1,3 +1,268 @@
+// import React, { useEffect, useState } from "react";
+// import {
+//   View,
+//   Text,
+//   StyleSheet,
+//   Image,
+//   ScrollView,
+//   TouchableOpacity,
+//   ActivityIndicator,
+// } from "react-native";
+// import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+// import { router } from "expo-router";
+// import AsyncStorage from "@react-native-async-storage/async-storage";
+// import { Auth_profile } from "../../Apiendpoint.jsx";
+
+// /* ---------------- HELPER ---------------- */
+// const formatDate = (dateString) => {
+//   if (!dateString) return "";
+//   const date = new Date(dateString);
+//   return date.toLocaleDateString("en-IN", {
+//     day: "2-digit",
+//     month: "short",
+//     year: "numeric",
+//   });
+// };
+
+// export default function Profile() {
+//   const [user, setUser] = useState(null);
+//   const [loading, setLoading] = useState(true);
+
+//   useEffect(() => {
+//     fetchProfile();
+//   }, []);
+
+//   const fetchProfile = async () => {
+//     try {
+//       const token = await AsyncStorage.getItem("token");
+//       if (!token) return;
+
+//       const res = await fetch(Auth_profile, {
+//         method: "GET",
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//         },
+//       });
+
+//       const data = await res.json();
+//       setUser(data.user);
+//     } catch (err) {
+//       console.log("Profile error:", err);
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   if (loading) {
+//     return (
+//       <View style={{ flex: 1, justifyContent: "center" }}>
+//         <ActivityIndicator size="large" />
+//       </View>
+//     );
+//   }
+
+//   return (
+//     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+//       {/* HEADER */}
+//       <View style={styles.header}>
+//         <Ionicons
+//           name="arrow-back"
+//           size={26}
+//           color="black"
+//           onPress={() => router.replace("/citizen/home")}
+//         />
+//         <Text style={styles.headerTitle}>Profile</Text>
+//         <View style={{ width: 26 }} />
+//       </View>
+
+//       {/* PROFILE CARD */}
+//       <View style={styles.profileCard}>
+//         <Image
+//           source={
+//             user?.image
+//               ? { uri: user.image }
+//               : require("../../assets/image/profile.png")
+//           }
+//           style={styles.profileImg}
+//         />
+//         <Text style={styles.name}>{user?.name}</Text>
+//         <Text style={styles.role}>{user?.role}</Text>
+//       </View>
+
+//       {/* BASIC INFO */}
+//       <View style={styles.infoCard}>
+//         <InfoRow icon="mail" text={user?.email} />
+//         <InfoRow icon="call" text={String(user?.mobileno || "")} />
+//         <InfoRow
+//           icon="location-on"
+//           text={[
+//             user?.address?.city,
+//             user?.address?.dist,
+//             user?.address?.state,
+//           ]
+//             .filter(Boolean)
+//             .join(", ")}
+//         />
+//         <InfoRow
+//           icon="calendar-today"
+//           text={`Joined on ${formatDate(user?.createdAt)}`}
+//         />
+//       </View>
+
+//       {/* ABOUT US */}
+//       {user?.aboutus ? (
+//         <>
+//           <Text style={styles.sectionTitle}>About Us</Text>
+//           <View style={styles.aboutCard}>
+//             <Text style={styles.aboutText}>{user.aboutus}</Text>
+//           </View>
+//         </>
+//       ) : null}
+
+//       {/* EDIT BUTTON */}
+//       <TouchableOpacity
+//         style={styles.editBtn}
+//         onPress={() =>
+//           router.push({
+//             pathname: "/citizen/EditProfile",
+//             params: { user: JSON.stringify(user) },
+//           })
+//         }
+//       >
+//         <Text style={styles.editText}>Edit Profile</Text>
+//       </TouchableOpacity>
+
+//       {/* LOGOUT */}
+//       <TouchableOpacity
+//         style={styles.logoutBtn}
+//         onPress={async () => {
+//           await AsyncStorage.removeItem("token");
+//           router.replace("/");
+//         }}
+//       >
+//         <Text style={styles.logoutText}>Logout</Text>
+//       </TouchableOpacity>
+//     </ScrollView>
+//   );
+// }
+
+// /* ---------------- COMPONENTS ---------------- */
+// const InfoRow = ({ icon, text }) => (
+//   <View style={styles.infoRow}>
+//     <MaterialIcons name={icon} size={22} color="#6B7280" />
+//     <Text style={styles.infoText}>{text || "-"}</Text>
+//   </View>
+// );
+
+// /* ---------------- STYLES ---------------- */
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     backgroundColor: "#ffffff",
+//     padding: 14,
+//   },
+
+//   header: {
+//     flexDirection: "row",
+//     alignItems: "center",
+//     marginleft: 20,
+//   },
+  
+//   headerTitle: {
+//     fontSize: 22,
+//     fontWeight: "700",
+//     marginLeft: 10,
+//     color: "#1B1B1B",
+//     marginTop:9,
+//     padding:4
+//   },
+//   profileCard: {
+//     backgroundColor: "#2E7D32",
+//     borderRadius: 28,
+//     padding: 24,
+//     alignItems: "center",
+//     marginBottom: 16,
+//   },
+//   profileImg: {
+//     width: 96,
+//     height: 96,
+//     borderRadius: 48,
+//     marginBottom: 12,
+//   },
+//   name: {
+//     color: "#fff",
+//     fontSize: 22,
+//     fontWeight: "900",
+//   },
+//   role: {
+//     color: "#EDE9FE",
+//     fontSize: 14,
+//   },
+
+//   infoCard: {
+//     backgroundColor: "#F9FAFB",
+//     borderRadius: 16,
+//     padding: 14,
+//     marginBottom: 12,
+//   },
+//   infoRow: {
+//     flexDirection: "row",
+//     alignItems: "center",
+//     marginVertical: 8,
+//   },
+//   infoText: {
+//     marginLeft: 12,
+//     fontSize: 15,
+//     color: "#374151",
+//   },
+
+//   sectionTitle: {
+//     fontSize: 18,
+//     fontWeight: "800",
+//     marginVertical: 12,
+//     color: "#111827",
+//   },
+
+//   aboutCard: {
+//     backgroundColor: "#F9FAFB",
+//     borderRadius: 16,
+//     padding: 16,
+//   },
+//   aboutText: {
+//     fontSize: 15,
+//     color: "#374151",
+//     lineHeight: 22,
+//   },
+
+//   editBtn: {
+//     backgroundColor: "#2E7D32",
+//     padding: 16,
+//     borderRadius: 14,
+//     alignItems: "center",
+//     marginTop: 20,
+//   },
+//   editText: {
+//     color: "#fff",
+//     fontSize: 16,
+//     fontWeight: "700",
+//   },
+
+//   logoutBtn: {
+//     backgroundColor: "#E5E7EB",
+//     padding: 16,
+//     borderRadius: 14,
+//     alignItems: "center",
+//     marginTop: 12,
+//     marginBottom: 40,
+//   },
+//   logoutText: {
+//     fontSize: 16,
+//     fontWeight: "700",
+//     color: "#111827",
+//   },
+// });
+
+
 import React, { useEffect, useState } from "react";
 import {
   View,
@@ -11,9 +276,10 @@ import {
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as Location from "expo-location";
 import { Auth_profile } from "../../Apiendpoint.jsx";
 
-/* ---------------- HELPER ---------------- */
+/* ---------- DATE FORMAT ---------- */
 const formatDate = (dateString) => {
   if (!dateString) return "";
   const date = new Date(dateString);
@@ -27,11 +293,13 @@ const formatDate = (dateString) => {
 export default function Profile() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [addressText, setAddressText] = useState("");
 
   useEffect(() => {
     fetchProfile();
   }, []);
 
+  /* ---------- FETCH PROFILE ---------- */
   const fetchProfile = async () => {
     try {
       const token = await AsyncStorage.getItem("token");
@@ -46,6 +314,23 @@ export default function Profile() {
 
       const data = await res.json();
       setUser(data.user);
+
+      // Convert latitude/longitude to address
+      if (data.user?.address?.latitude && data.user?.address?.longitude) {
+        const addr = await Location.reverseGeocodeAsync({
+          latitude: data.user.address.latitude,
+          longitude: data.user.address.longitude,
+        });
+
+        if (addr.length > 0) {
+          const place = addr[0];
+          setAddressText(
+            `${place.city || ""}, ${place.region || ""}, ${
+              place.country || ""
+            }`
+          );
+        }
+      }
     } catch (err) {
       console.log("Profile error:", err);
     } finally {
@@ -53,6 +338,7 @@ export default function Profile() {
     }
   };
 
+  /* ---------- LOADING ---------- */
   if (loading) {
     return (
       <View style={{ flex: 1, justifyContent: "center" }}>
@@ -72,7 +358,6 @@ export default function Profile() {
           onPress={() => router.replace("/citizen/home")}
         />
         <Text style={styles.headerTitle}>Profile</Text>
-        <View style={{ width: 26 }} />
       </View>
 
       {/* PROFILE CARD */}
@@ -89,20 +374,11 @@ export default function Profile() {
         <Text style={styles.role}>{user?.role}</Text>
       </View>
 
-      {/* BASIC INFO */}
+      {/* INFO CARD */}
       <View style={styles.infoCard}>
         <InfoRow icon="mail" text={user?.email} />
         <InfoRow icon="call" text={String(user?.mobileno || "")} />
-        <InfoRow
-          icon="location-on"
-          text={[
-            user?.address?.city,
-            user?.address?.dist,
-            user?.address?.state,
-          ]
-            .filter(Boolean)
-            .join(", ")}
-        />
+        <InfoRow icon="location-on" text={addressText || "-"} />
         <InfoRow
           icon="calendar-today"
           text={`Joined on ${formatDate(user?.createdAt)}`}
@@ -119,7 +395,7 @@ export default function Profile() {
         </>
       ) : null}
 
-      {/* EDIT BUTTON */}
+      {/* EDIT PROFILE */}
       <TouchableOpacity
         style={styles.editBtn}
         onPress={() =>
@@ -146,7 +422,7 @@ export default function Profile() {
   );
 }
 
-/* ---------------- COMPONENTS ---------------- */
+/* ---------- INFO ROW ---------- */
 const InfoRow = ({ icon, text }) => (
   <View style={styles.infoRow}>
     <MaterialIcons name={icon} size={22} color="#6B7280" />
@@ -154,7 +430,7 @@ const InfoRow = ({ icon, text }) => (
   </View>
 );
 
-/* ---------------- STYLES ---------------- */
+/* ---------- STYLES ---------- */
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -165,17 +441,16 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: "row",
     alignItems: "center",
-    marginleft: 20,
+    marginBottom: 10,
   },
-  
+
   headerTitle: {
     fontSize: 22,
     fontWeight: "700",
     marginLeft: 10,
     color: "#1B1B1B",
-    marginTop:9,
-    padding:4
   },
+
   profileCard: {
     backgroundColor: "#2E7D32",
     borderRadius: 28,
@@ -183,17 +458,20 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 16,
   },
+
   profileImg: {
     width: 96,
     height: 96,
     borderRadius: 48,
     marginBottom: 12,
   },
+
   name: {
     color: "#fff",
     fontSize: 22,
     fontWeight: "900",
   },
+
   role: {
     color: "#EDE9FE",
     fontSize: 14,
@@ -205,11 +483,13 @@ const styles = StyleSheet.create({
     padding: 14,
     marginBottom: 12,
   },
+
   infoRow: {
     flexDirection: "row",
     alignItems: "center",
     marginVertical: 8,
   },
+
   infoText: {
     marginLeft: 12,
     fontSize: 15,
@@ -228,6 +508,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: 16,
   },
+
   aboutText: {
     fontSize: 15,
     color: "#374151",
@@ -241,6 +522,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 20,
   },
+
   editText: {
     color: "#fff",
     fontSize: 16,
@@ -255,6 +537,7 @@ const styles = StyleSheet.create({
     marginTop: 12,
     marginBottom: 40,
   },
+
   logoutText: {
     fontSize: 16,
     fontWeight: "700",

@@ -62,23 +62,7 @@ export default function ReportHistory() {
         data={reports}
         keyExtractor={(item) => item._id}
         ListEmptyComponent={<Text>No reports found</Text>}
-        // renderItem={({ item }) => (
-        //   <View style={styles.card}>
-        //     <Text style={styles.label}>
-        //       Date:{" "}
-        //       {new Date(item.incidentDate).toLocaleDateString()}
-        //     </Text>
-
-        //     <Text style={styles.label}>
-        //       Location: {item.location?.latitude},{" "}
-        //       {item.location?.longitude}
-        //     </Text>
-
-        //     <Text style={styles.status}>
-        //       Status: {item.status}
-        //     </Text>
-        //   </View>
-        // )}
+        
         renderItem={({ item }) => (
         <TouchableOpacity
             style={styles.card}

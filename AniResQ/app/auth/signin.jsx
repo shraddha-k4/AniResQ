@@ -51,7 +51,7 @@ export default function Signin() {
       if (data.user.role === "citizen") {
         router.replace("/citizen/home");
       } else if (data.user.role === "ngo") {
-        router.replace("/ngo/home");
+        router.replace("/ngo/tab/home");
       }else if (data.user.role === "admin") {
         router.replace("/admin/ahome");
       } 

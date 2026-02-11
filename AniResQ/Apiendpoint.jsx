@@ -5,7 +5,7 @@ import { Platform } from "react-native";
 export const baseUrl =
   Platform.OS === "web"
     ? "http://localhost:3000"
-    : "http://10.161.52.119:3000"; 
+    : "http://10.81.32.119:3000"; 
 
 
 export const Auth_signup = `${baseUrl}/api/auth/signup`;

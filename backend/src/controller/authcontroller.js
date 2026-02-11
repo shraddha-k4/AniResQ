@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import User from "../model/user.js";
+import User from "../model/User.js";
 import cloudinary from "../config/cloudinary.js";
 import { sendOTPEmail } from "../helpers/email.js";
 
@@ -19,7 +19,7 @@ export const signup = async (req, res) => {
       aboutus
     } = req.body || {};
 
-    const { city, dist, state, pincode, country } = address;
+    const { latitude, longitude } = address;
 
     // ---------- VALIDATION ----------
     if (!name || !email || !password || !mobileno) {
@@ -34,9 +34,20 @@ export const signup = async (req, res) => {
       return res.status(400).json({ message: "Mobile number must be exactly 10 digits" });
     }
 
-    if (pincode && !/^\d{6}$/.test(pincode)) {
-      return res.status(400).json({ message: "Pincode must be exactly 6 digits" });
+    if (
+      latitude &&
+      (latitude < -90 || latitude > 90)
+    ) {
+      return res.status(400).json({ message: "Invalid latitude" });
     }
+
+    if (
+      longitude &&
+      (longitude < -180 || longitude > 180)
+    ) {
+      return res.status(400).json({ message: "Invalid longitude" });
+    }
+
 
     // ---------- CHECK EXISTING USER ----------
     const userExist = await User.findOne({ email });
@@ -71,11 +82,13 @@ export const signup = async (req, res) => {
     // ---------- CREATE USER ----------
     const newUser = await User.create({
       name,
-      email,
+      email: email.toLowerCase(),
       password: hashedPassword,
       mobileno,
       role:role.toLowerCase(),
-      address: { city, dist, state, pincode, country },
+      address: {
+      latitude: latitude || null,
+      longitude: longitude || null,},
       image: imageUrl,   // ✅ user-uploaded image URL
       regiid,
       aboutus,
@@ -239,18 +252,23 @@ export const updateMyProfile = async (req, res) => {
       regiid,
       } = req.body || {};
 
-    const { city, dist, state, pincode, country } = address;
+    const { latitude, longitude } = address;
+
 
     // ---------- VALIDATION ----------
     if (mobileno && !/^\d{10}$/.test(mobileno)) {
       return res.status(400).json({ message: "Mobile number must be exactly 10 digits" });
     }
+    if (latitude !== undefined && (latitude < -90 || latitude > 90)) {
+  return res.status(400).json({ message: "Invalid latitude" });
+}
 
-    if (pincode && !/^\d{6}$/.test(pincode)) {
-      return res.status(400).json({ message: "Pincode must be exactly 6 digits" });
-    }
+if (longitude !== undefined && (longitude < -180 || longitude > 180)) {
+  return res.status(400).json({ message: "Invalid longitude" });
+}
 
-    const user = await User.findById(userId);
+
+      const user = await User.findById(userId);
     if (!user) return res.status(404).json({ message: "User not found" });
 
     // ---------- IMAGE UPDATE ----------
@@ -274,13 +292,12 @@ export const updateMyProfile = async (req, res) => {
     if (mission) user.mission = mission;
     if (regiid) user.regiid = regiid;
 
-    user.address = {
-      city: city ?? user.address.city,
-      dist: dist ?? user.address.dist,
-      state: state ?? user.address.state,
-      pincode: pincode ?? user.address.pincode,
-      country: country ?? user.address.country,
-    };
+     user.address = {
+  latitude: latitude ?? user.address?.latitude,
+  longitude: longitude ?? user.address?.longitude,
+};
+
+
 
     await user.save();
 

@@ -7,6 +7,7 @@ import { useRouter } from "expo-router";
 
 export default function AllReportedCasesScreen() {
   const [reports, setReports] = useState([]);
+  const [search, setSearch] = useState("");
   const router = useRouter();
 
   useEffect(() => {
@@ -35,6 +36,13 @@ export default function AllReportedCasesScreen() {
     fetchReports();
   }, []);
 
+  const filteredReports = reports.filter((item) =>
+  item.address?.toLowerCase().includes(search.toLowerCase()) ||
+  item._id?.toLowerCase().includes(search.toLowerCase()) ||
+  item.user?.name?.toLowerCase().includes(search.toLowerCase())
+);
+
+
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       
@@ -52,7 +60,10 @@ export default function AllReportedCasesScreen() {
           placeholder="Search by case ID, location..."
           placeholderTextColor="#8A8A8A"
           style={styles.searchInput}
+          value={search}
+          onChangeText={(text) => setSearch(text)}
         />
+
       </View>
 
       {/* Tabs */}
@@ -69,7 +80,7 @@ export default function AllReportedCasesScreen() {
       </View>
 
       {/* Dynamic Case Cards */}
-      {reports.map((item) => (
+      {filteredReports.map((item) => (
         <View key={item._id} style={styles.caseCard}>
           <View style={styles.caseHeader}>
             <Text style={styles.caseId}>
@@ -216,3 +227,5 @@ const styles = StyleSheet.create({
   },
   detailsText: { color: "#fff", fontWeight: "700" },
 });
+
+

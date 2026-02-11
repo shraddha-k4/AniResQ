@@ -20,13 +20,6 @@ authrouter.post("/verifyotp", verifyOTP);
 authrouter.get("/getProfile",authMiddleware,getMyProfile);
 //update profile
 authrouter.put("/updateprofile",authMiddleware,upload.single("image"),updateMyProfile);
-// //report create
-// //authrouter.post("/reportcreate",authMiddleware,upload.single("image"),createReport);
-
-// authrouter.get("/allreportcase", authMiddleware, getAllReports);      // admin / authority
-// authrouter.get("/myreport", authMiddleware, getMyReports);        // citizen
-// authrouter.get("/:idreport", authMiddleware, getReportById);      // single report
-
 
 
 // Protected route example
