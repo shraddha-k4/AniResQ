@@ -49,7 +49,7 @@ export default function SuccessScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#6C7EE1",
+    backgroundColor: "#218526",
     justifyContent: "center",
     alignItems: "center",
     padding: 16,
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
   },
 
   primaryBtn: {
-    backgroundColor: "#6C7EE1",
+    backgroundColor: "#2E7D32",
     padding: 14,
     borderRadius: 12,
     width: "100%",
@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
 
   secondaryBtn: {
     borderWidth: 1,
-    borderColor: "#6C7EE1",
+    borderColor: "#2E7D32",
     padding: 14,
     borderRadius: 12,
     width: "100%",
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
   },
 
   secondaryText: {
-    color: "#6C7EE1",
+    color: "#2E7D32",
     fontWeight: "700",
   },
 });

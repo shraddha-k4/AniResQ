@@ -6,6 +6,7 @@ import {
   ActivityIndicator,
   StyleSheet,
   TouchableOpacity,
+  Image,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Ionicons } from "@expo/vector-icons";
@@ -49,7 +50,7 @@ export default function ReportHistory() {
 
   return (
     <View style={styles.container}>
-      {/* 🔹 HEADER */}
+      {/* HEADER */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.back()}>
           <Ionicons name="arrow-back" size={26} color="#000" />
@@ -57,34 +58,46 @@ export default function ReportHistory() {
         <Text style={styles.headerTitle}>Report History</Text>
       </View>
 
-      {/* 🔹 REPORT LIST */}
       <FlatList
         data={reports}
         keyExtractor={(item) => item._id}
         ListEmptyComponent={<Text>No reports found</Text>}
-        
         renderItem={({ item }) => (
-        <TouchableOpacity
+          <TouchableOpacity
             style={styles.card}
             onPress={() =>
-            router.push(`/citizen/reportDetails?id=${item._id}`)
+              router.push(`/citizen/reportDetails?id=${item._id}`)
             }
-        >
+          >
+            {/* IMAGE */}
+            {item.image ? (
+              <Image
+                source={{ uri: item.image }}
+                style={styles.reportImage}
+              />
+            ) : (
+              <Text>No image available</Text>
+            )}
+
+            {/* DATE */}
             <Text style={styles.label}>
-            Date: {new Date(item.incidentDate).toLocaleDateString()}
+              Date: {new Date(item.incidentDate).toLocaleDateString()}
             </Text>
 
-            <Text style={styles.label}>
-            Location: {item.location?.latitude},{" "}
-            {item.location?.longitude}
-            </Text>
-
+            {/* STATUS */}
             <Text style={styles.status}>
-            Status: {item.status}
+              Status: {item.status}
             </Text>
-        </TouchableOpacity>
-        )}
 
+            {/* NGO ACCEPTED */}
+            <Text style={styles.ngo}>
+              Accepted By:{" "}
+              {item.acceptedBy?.name
+                ? item.acceptedBy.name
+                : "Not accepted yet"}
+            </Text>
+          </TouchableOpacity>
+        )}
       />
     </View>
   );
@@ -129,9 +142,22 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
 
+  reportImage: {
+    width: "100%",
+    height: 180,
+    borderRadius: 10,
+    marginVertical: 10,
+  },
+
   status: {
     fontSize: 15,
     fontWeight: "bold",
     color: "#2E7D32",
+  },
+
+  ngo: {
+    fontSize: 14,
+    marginTop: 5,
+    color: "#444",
   },
 });
