@@ -53,7 +53,7 @@ export default function Signin() {
       } else if (data.user.role === "ngo") {
         router.replace("/ngo/tab/home");
       }else if (data.user.role === "admin") {
-        router.replace("/admin/ahome");
+        router.replace("/admin/AdminDashboard");
       } 
     }catch (error) {
       Alert.alert("Error", "Server not reachable");
